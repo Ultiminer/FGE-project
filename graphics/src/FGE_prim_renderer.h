@@ -10,7 +10,6 @@
 #include "FGE_sdl_types.h"
 #include "FGE_prim_geometry.h"
 
-
 #define PRIM_DEBUG 
 #ifdef PRIM_DEBUG
 #define PRIM_DEBUG_PRINT(x) std::cout<<x<<std::endl;
@@ -85,7 +84,6 @@ inline __FGE_PRIMITIVE_GlUniformSystem& seti(const char* uniform,int val1, int v
 
 
 } __fge_primitive_uniform_sys;
-
 
 
 
@@ -304,9 +302,9 @@ inline void FGE_RENDER_SMOOTH()
 
 inline void FGE_INIT_RENDER_DEFAULT()
 {
-    __FGE_PRIM_RENDER_INIT("../shader/default_vertex.glsl","../shader/default_fragment.glsl",{"myColor","myAngle","myShape","myCamera","windSize","coordMode","drawImage"});
+    __FGE_PRIM_RENDER_INIT("../shader/default_vertex.glsl","../shader/default_fragment.glsl",{"myColor","myAngle","myShape","myCamera","windSize","coordMode","colorEdge","drawImage","ourTexture"});
     __fge_primitive_uniform_sys.setf("myColor",0,0,0,0).setf("myAngle",0).setf("myShape",0,0,1,1).setf("myCamera",0,0)
-    .setf("windSize",800,600).seti("coordMode",0).seti("drawImage",false);
+    .setf("windSize",800,600).seti("coordMode",0).setf("colorEdge",0,0).seti("drawImage",0).seti("ourTexture",0);
 }
 
 inline void FGE_UseRelativeCoords()noexcept

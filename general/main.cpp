@@ -1,14 +1,12 @@
 #include <iostream>
-#include "FGE_intrinsics.h"
-#include "FGE_random.h"
-#include "FGE_gen_salt.h"
-#include "FGE_frac.h"
+#include "FGE_bmp.h"
 
-using namespace FGE; 
+#define Print(x) std::cout<< x <<std::endl;
+
+
 int main()
 {
-
-    
-   
+   auto file=FGE::LoadBitmap("black_square.bmp");
+    std::cout<<"width: "<<file.width<<" height: "<<file.height<<" channelNum: "<<file.channelNum<<std::endl;
     return 0;
 }

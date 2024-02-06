@@ -1,12 +1,22 @@
 #ifndef FGE_IMAGE_H_
 #define FGE_IMAGE_H_
-#include "glad.h"
-#include <unordered_map>
-#include "FGE_sdl_types.h"
-#include "FGE_prim_renderer.h"
 
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
+
+#include <iostream>
+#include "FGE_shape.h"
+#include <unordered_map>
+#include <vector>
+#include "FGE_bmp.h"
+
+/* 
+----------------------IMAGE LIBRARY THAT SUPPORTS BMP FILES---------------------
+---------------------------------TODO------------------------------------------
+(1) PROVIDE A DEFINITION FOR THE LOAD_BMP FUNCTION
+(2) MAKE IMAGE CREATION WORK WITH THE CURRENT SHADERS
+*/
+
+
+
 
 inline void FGE_TextureInit()
 {
@@ -18,54 +28,39 @@ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 struct FGE_Texture
 {
-    int width, height, channelNum;
     unsigned int id;  
+    FGE::BMP_DESCRIPTOR descriptor;
     FGE_Texture(const char* imgPath)
     {
-      unsigned char*data= stbi_load(imgPath, &width, &height, &channelNum, 0); 
-        if(!data)exit(-1);
-      glGenTextures(1, &id); 
+    descriptor= FGE::LoadBitmap(imgPath); 
+      glGenTextures( 1,&id); 
+      glActiveTexture(GL_TEXTURE0);
       glBindTexture(GL_TEXTURE_2D, id); 
-      FGE_TextureInit();
-      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+      
+
+      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, descriptor.width, descriptor.height, 0,GL_RGB, GL_BYTE, (char*)descriptor.data.data());
       glGenerateMipmap(GL_TEXTURE_2D);
-      stbi_image_free(data);
     }
     ~FGE_Texture()
     {
         glDeleteTextures(1,&id);
+        descriptor.data.erase(descriptor.data.begin(),descriptor.data.end());
     }
 };
 
-
-class FGE_TextureMap
+inline void FGE_DrawTexture(const FGE_Texture& texture, const FGE::SRect& rect)
 {
-private:
-std::unordered_map<const char*, FGE_Texture>textMap;
-
-public:
-FGE_TextureMap(){}
-FGE_TextureMap& Add(const char* name, const char* path)
-{
-    textMap.insert({name,FGE_Texture(path)});
-    return *this; 
-}
-FGE_Texture& Get(const char* name)
-{
-    return textMap.at(name);
-}
-
-
-
-};
-
-inline void FGE_DrawTexture(const FGE_Texture& texture,const FGE_FRect& rect, float angle=0)
-{
-    __fge_primitive_uniform_sys.seti("drawImage", true);
+    __fge_primitive_uniform_sys.setf("colorEdge", rect.xm,rect.ym);
+    __fge_primitive_uniform_sys.seti("drawImage", 1);
+    glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture.id);
-    __fge_primitive_uniform_sys.setf("myShape",rect.x,rect.y,rect.w,rect.h).setf("myAngle",angle);
-    __FGE_PRIM_RENDER_FILL_SHAPE((float*)__FGE_PRIMITIVE_PRELOAD_SQUARE_DATA,4);
-     __fge_primitive_uniform_sys.seti("drawImage", false);
+    rect.Draw();
+    __fge_primitive_uniform_sys.seti("drawImage", 0);
 }
 
 #endif

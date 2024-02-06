@@ -23,7 +23,7 @@ struct Color
 struct BMP_DESCRIPTOR
 {
     int width,height,channelNum; 
-    std::vector<unsigned char> data; 
+    std::vector<char> data; 
 };
 inline struct BMP_HEAD{const BYTE2 id{66+77*256}; BYTE4 fileSize; const BYTE4 reserved{0}; const BYTE4 offsetToImgData{54};}bmpHead; 
 inline struct BMP_INFO{const BYTE4 size{40};sBYTE4 imgWidth; sBYTE4 imgHeight; const BYTE2 numColorPlanes{1}; const BYTE2 bitsPerPixel{32};
@@ -49,11 +49,14 @@ inline BMP_DESCRIPTOR LoadBitmap(const char* src) noexcept
     size_t pixelDataOffset=0;
     bool PIXEL_DATA_MODE=false;
 
-    while(file>>std::noskipws>>currByte)
+    while(file>>currByte)
     {
         if(PIXEL_DATA_MODE)
         {
+            //if(byteNum-pixelDataOffset<5||(byteNum-pixelDataOffset-2)%6>1){
             retVal.data.push_back(currByte); 
+            std::cout<<(int)currByte<<"|";
+            //}
         }
         else{
         //Read out offset to pixel data array
@@ -64,14 +67,14 @@ inline BMP_DESCRIPTOR LoadBitmap(const char* src) noexcept
         if(byteNum==26)retVal.height=MAP_IN_BYTE4(readBuffer.at(22));
         //Read out channelNum in bitsPerPixel/8
         if(byteNum==30)retVal.channelNum=MAP_IN_BYTE2(readBuffer.at(28))/8;
-        if(pixelDataOffset!=0&&currByte==pixelDataOffset-1)PIXEL_DATA_MODE=true;
-       
+        if(pixelDataOffset!=0&&byteNum==pixelDataOffset-1)PIXEL_DATA_MODE=true;
+       }
         readBuffer+=currByte;  
-        }
+        
         byteNum++;
     }
     file.close();
-
+    std::cout<<"width: "<<retVal.width<<" height: "<<retVal.height<<" channelNum: "<<retVal.channelNum<<" data_size: "<<retVal.data.size();
 
     return retVal;
 }

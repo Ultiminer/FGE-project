@@ -1,39 +1,22 @@
-#include "FGE_window.h"
-#include "FGE_shape.h"
 #include <iostream>
 #include "math.h"
-#include "FGE_Color.h"
-
-#define BUILD_ALL_TARGETS remove("../build/main.o");remove("../build/glad.o");
+#include "FGE_setup.h"
+#include "FGE_image.h"
 
 //This library can be super extended with any kind of SDL, SDL2, or OpenGL functionality 
-
 int FGE_Main()
 {
     BUILD_ALL_TARGETS;
-    
     //Creating the window context
-    FGE::Window wind= FGE::Window();
+    FGE::Window wind= FGE_General_Init();
     
-    //Initializing FGE functionality
-    FGE_INIT_RENDER_DEFAULT();
-    FGE_RENDER_SMOOTH();
-     /*Creating BLACKPINK tm xDDD*/
-    FGE_SetClearColor(FGE::lightpink|FGE::black);
-    FGE_UseAbsoluteCoords(wind.GetWidth(),wind.GetHeight());
+    FGE::SSquircle rect={0,0,100,100};
+    FGE_Texture text=FGE_Texture("good.bmp");
+    FGE_Loop_Start(wind)
+        rect.Draw({yellow|brown}).DrawBorder();
+        FGE_DrawTexture(text,{20,10,100,100});
+    FGE_Loop_End(wind)
+    
 
-    //Specifying the necessary shapes
-   // FGE::SArrow arrow{0,100,20,50,0};
-    FGE::SRect rect={0,0,400,300};
-    while(wind.IsRunning())
-    {
-        FGE_START_RENDER();
-        
-        rect.Draw(FGE::blue).Rotate(0.01).SetW2(sin(SDL_GetTicks()%1000)*400).UpdateShape();
-        wind.Swap();
-        wind.PollEvents();
-    }
-
-    FGE_PRIM_RENDER_DELETE();
-    return 0;
+    FGE_Return();
 }

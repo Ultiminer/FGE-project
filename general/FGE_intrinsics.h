@@ -22,7 +22,19 @@ constexpr std::array<float, S> FGE_CompAdd(const std::array<float, S>& a, const 
     return retVal; 
 }
 
+template<size_t S>
+constexpr std::array<float, S> FGE_CompSub(const std::array<float, S>& a, const std::array<float, S>& b)noexcept
+{
+   std::array<float,S>retVal; 
+    constexpr size_t numChunks{4};
+    constexpr size_t numVectorizable{S/numChunks};
 
+    for(size_t i=0;i<numVectorizable;++i)
+    _mm_storeu_ps(retVal.data()+i*numChunks,_mm_sub_ps(__FGE_M128(a.data()+i*numChunks),__FGE_M128(b.data()+i*numChunks)));
+    
+    for(size_t i=numVectorizable; i<a.size();++i)retVal.at(i)=a.at(i)-b.at(i);
+    return retVal; 
+}
 /*Multiplys the components of the two arrays into a new array*/
 template<size_t S>
 constexpr std::array<float, S> FGE_CompMultiply(const std::array<float, S>& a, const std::array<float, S>& b)noexcept

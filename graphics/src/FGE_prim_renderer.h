@@ -9,13 +9,9 @@
 #include <unordered_map>
 #include "FGE_sdl_types.h"
 #include "FGE_prim_geometry.h"
+#include "FGE_debug.h"
 
-#define PRIM_DEBUG 
-#ifdef PRIM_DEBUG
-#define PRIM_DEBUG_PRINT(x) std::cout<<x<<std::endl;
-#else 
-#define PRIM_DEBUG_PRINT(x)
-#endif
+
 
 
 
@@ -133,15 +129,15 @@ inline void __FGE_PRIM_RENDER_INIT(const char* vertexSrc, const char* fragmentSr
     glShaderSource(vertexId, 1, &Ssource, NULL);
     glCompileShader(vertexId);
 
-    #ifdef PRIM_DEBUG
+    #ifndef FGE_Active
     int success;
     char infoLog[512];
     glGetShaderiv(vertexId, GL_COMPILE_STATUS, &success);
     if(!success)
     {
     glGetShaderInfoLog(vertexId, 512, NULL, infoLog);
-    std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" <<
-    infoLog << std::endl;
+    FGE_EXIT("ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" <<infoLog);
+    
     }
     #endif
 
@@ -151,14 +147,13 @@ inline void __FGE_PRIM_RENDER_INIT(const char* vertexSrc, const char* fragmentSr
     glShaderSource(fragmentId, 1, &Ssource, NULL);
     glCompileShader(fragmentId);
 
-    #ifdef PRIM_DEBUG
+    #ifndef FGE_Active
     
-    glGetShaderiv(fragmentId, GL_COMPILE_STATUS, &success);
     if(!success)
-    {
+    {    
+    glGetShaderiv(fragmentId, GL_COMPILE_STATUS, &success);
     glGetShaderInfoLog(fragmentId, 512, NULL, infoLog);
-    std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" <<
-    infoLog << std::endl;
+    FGE_EXIT("ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" <<infoLog ) ;
     }
     #endif
 
@@ -169,13 +164,12 @@ inline void __FGE_PRIM_RENDER_INIT(const char* vertexSrc, const char* fragmentSr
     
     glDeleteShader(vertexId); glDeleteShader(fragmentId);
 
-    #ifdef PRIM_DEBUG
+    #ifndef FGE_Active
   
     glGetProgramiv(__fge_primitive_renderer.shaderProgram, GL_LINK_STATUS, &success);
     if(!success) {
     glGetProgramInfoLog(__fge_primitive_renderer.shaderProgram, 512, NULL, infoLog);
-    std::cout << "ERROR::PROGRAM::COMPILATION_FAILED\n" <<
-    infoLog << std::endl;
+    FGE_EXIT("ERROR::PROGRAM::COMPILATION_FAILED\n" <<infoLog );
     }
     #endif
 
@@ -302,9 +296,9 @@ inline void FGE_RENDER_SMOOTH()
 
 inline void FGE_INIT_RENDER_DEFAULT()
 {
-    __FGE_PRIM_RENDER_INIT("../shader/default_vertex.glsl","../shader/default_fragment.glsl",{"myColor","myAngle","myShape","myCamera","windSize","coordMode","colorEdge","drawImage","ourTexture"});
+    __FGE_PRIM_RENDER_INIT("../shader/default_vertex.glsl","../shader/default_fragment.glsl",{"myColor","myAngle","myShape","myCamera","windSize","coordMode","midPoint","drawImage","ourTexture"});
     __fge_primitive_uniform_sys.setf("myColor",0,0,0,0).setf("myAngle",0).setf("myShape",0,0,1,1).setf("myCamera",0,0)
-    .setf("windSize",800,600).seti("coordMode",0).setf("colorEdge",0,0).seti("drawImage",0).seti("ourTexture",0);
+    .setf("windSize",800,600).seti("coordMode",0).setf("midPoint",0,0).seti("drawImage",0).seti("ourTexture",0);
 }
 
 inline void FGE_UseRelativeCoords()noexcept

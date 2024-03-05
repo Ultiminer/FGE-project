@@ -9,7 +9,7 @@ out vec2 texCoord;
 void main()
 {
 
-texCoord=aTexCoord; 
+texCoord=vec2(aTexCoord.x,aTexCoord.y); 
 
 /*DEFAULT CASE*/
 if(coordMode==0)

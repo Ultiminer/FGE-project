@@ -29,7 +29,7 @@ inline void UpdateShape()noexcept
 {
 vertices=TransformVertices<1026>(__FGE_PRIMITIVE_PRELOAD_CIRCLE_DATA,x,y,r,r);
 }
-
+SCircle(){}
 SCircle(float X, float Y, float R):x(X),y(Y),r(R){
 UpdateShape();
 
@@ -77,7 +77,7 @@ inline void UpdateShape()noexcept
     vertices= TransformVertices<1026>(__FGE_PRIMITIVE_PRELOAD_CIRCLE_DATA, x,y,a,b,angle);
 }
 public:
-
+SEllipse(){}
 SEllipse(float X, float Y, float A, float B,float ANGLE=0):x(X),y(Y),a(A),b(B),angle(ANGLE){
     UpdateShape();
 }
@@ -130,7 +130,7 @@ inline SRect UpdateShape()noexcept
 vertices=TransformVertices<10>(__FGE_PRIMITIVE_PRELOAD_SQUARE_DATA,xm,ym,w2,h2,angle);
 return *this;
 }
-
+SRect(){}
 SRect(float X_M, float Y_M, float W_HALF, float H_HALF, float ANGLE=0):xm(X_M),ym(Y_M),w2(W_HALF),h2(H_HALF),angle(ANGLE){
 UpdateShape();
 }
@@ -196,7 +196,7 @@ inline void UpdateShape()noexcept
 {
     vertices= TransformVertices<1026>(__FGE_PRIMITIVE_PRELOAD_SQUIRCLE_DATA, x,y,a,b,angle);
 }
-
+SSquircle(){}
 SSquircle(float X, float Y, float A, float B,float ANGLE=0):x(X),y(Y),a(A),b(B),angle{ANGLE}{
     UpdateShape();
 }
@@ -242,6 +242,7 @@ class STriangle
 {
 public: 
 FGE_FPoint a,b,c;
+STriangle(){}
 STriangle(const FGE_FPoint& A, const FGE_FPoint& B, const FGE_FPoint& C ):a(A),b(B),c(C){}
 inline std::array<float,6> GetVertices()const noexcept
 {
@@ -280,6 +281,8 @@ class SPlus
 {
 public: 
 float x; float y; float l; std::array<float,26>vertices; 
+
+SPlus(){}
 inline void UpdateShape()noexcept
 {
 vertices=TransformVertices<26>(__FGE_PRIMITIVE_PRELOAD_PLUS_DATA,x,y,l,l);

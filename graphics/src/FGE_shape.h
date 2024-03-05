@@ -4,8 +4,7 @@
 #include "math.h"
 #include <array>
 #include <string>
-#include "GCEM/gcem.hpp"
-
+#include "quick_math.h"
 
 
 /*Interface for the drawing operation and geometric manipulation of basic shapes*/
@@ -61,7 +60,7 @@ inline SCircle& SetR(float R)noexcept{r=R;return *this;}
 inline SCircle& ShiftX(float dx)noexcept{x+=dx;return *this;}
 inline SCircle& ShiftY(float dy)noexcept{y+=dy;return *this;}
 inline SCircle& LERP(const FGE_FPoint& p, float lerpRate=0.01){x+=lerpRate*(p.x-x);y+=lerpRate*(p.y-y);return *this;}
-inline SCircle& SMOOTHSTEP(const FGE_FPoint& p, float stepRate=0.04){x+=SHAPE_SMOOTHSTEP(stepRate*gcem::tanh(p.x-x))*(p.x-x);y+=SHAPE_SMOOTHSTEP(stepRate*gcem::tanh(p.y-y))*(p.y-y);return *this;}
+inline SCircle& SMOOTHSTEP(const FGE_FPoint& p, float stepRate=0.04){x+=SHAPE_SMOOTHSTEP(stepRate*QM::tanh(p.x-x))*(p.x-x);y+=SHAPE_SMOOTHSTEP(stepRate*QM::tanh(p.y-y))*(p.y-y);return *this;}
 
 inline float GetX()const noexcept{return x;}
 inline float GetY()const noexcept{return y;}
@@ -111,7 +110,7 @@ inline SEllipse& ShiftX(float dx)noexcept{x+=dx;return *this;}
 inline SEllipse& ShiftY(float dy)noexcept{y+=dy;return *this;}
 inline SEllipse& Rotate(float dTheta)noexcept{angle+=dTheta;return *this;}
 inline SEllipse& LERP(const FGE_FPoint& p, float lerpRate=0.01){x+=lerpRate*(p.x-x);y+=lerpRate*(p.y-y);return *this;}
-inline SEllipse& SMOOTHSTEP(const FGE_FPoint& p, float stepRate=0.04){x+=SHAPE_SMOOTHSTEP(stepRate*gcem::tanh(p.x-x))*(p.x-x);y+=SHAPE_SMOOTHSTEP(stepRate*gcem::tanh(p.y-y))*(p.y-y);return *this;}
+inline SEllipse& SMOOTHSTEP(const FGE_FPoint& p, float stepRate=0.04){x+=SHAPE_SMOOTHSTEP(stepRate*QM::tanh(p.x-x))*(p.x-x);y+=SHAPE_SMOOTHSTEP(stepRate*QM::tanh(p.y-y))*(p.y-y);return *this;}
 
 
 inline float GetX()const noexcept{return x;}
@@ -180,7 +179,7 @@ inline SRect& ShiftX(float dx)noexcept{xm+=dx;return *this;}
 inline SRect& ShiftY(float dy)noexcept{ym+=dy;return *this;}
 inline SRect& Rotate(float dTheta)noexcept{angle+=dTheta;return *this;}
 inline SRect& LERP(const FGE_FPoint& p, float lerpRate=0.01){xm+=lerpRate*(p.x-xm);ym+=lerpRate*(p.y-ym);return *this;}
-inline SRect& SMOOTHSTEP(const FGE_FPoint& p, float stepRate=0.04){xm+=SHAPE_SMOOTHSTEP(stepRate*gcem::tanh(p.x-xm))*(p.x-xm);ym+=SHAPE_SMOOTHSTEP(stepRate*gcem::tanh(p.y-ym))*(p.y-ym);return *this;}
+inline SRect& SMOOTHSTEP(const FGE_FPoint& p, float stepRate=0.04){xm+=SHAPE_SMOOTHSTEP(stepRate*QM::tanh(p.x-xm))*(p.x-xm);ym+=SHAPE_SMOOTHSTEP(stepRate*QM::tanh(p.y-ym))*(p.y-ym);return *this;}
 
 inline float GetXM()const noexcept{return xm;}
 inline float GetYM()const noexcept{return ym;}
@@ -230,7 +229,7 @@ inline SSquircle& ShiftX(float dx)noexcept{x+=dx;return *this;}
 inline SSquircle& ShiftY(float dy)noexcept{y+=dy;return *this;}
 inline SSquircle& Rotate(float dTheta)noexcept{angle+=dTheta;return *this;}
 inline SSquircle& LERP(const FGE_FPoint& p, float lerpRate=0.01){x+=lerpRate*(p.x-x);y+=lerpRate*(p.y-y);return *this;}
-inline SSquircle& SMOOTHSTEP(const FGE_FPoint& p, float stepRate=0.04){x+=SHAPE_SMOOTHSTEP(stepRate*gcem::tanh(p.x-x))*(p.x-x);y+=SHAPE_SMOOTHSTEP(stepRate*gcem::tanh(p.y-y))*(p.y-y);return *this;}
+inline SSquircle& SMOOTHSTEP(const FGE_FPoint& p, float stepRate=0.04){x+=SHAPE_SMOOTHSTEP(stepRate*QM::tanh(p.x-x))*(p.x-x);y+=SHAPE_SMOOTHSTEP(stepRate*QM::tanh(p.y-y))*(p.y-y);return *this;}
 
 inline float GetX()const noexcept{return x;}
 inline float GetY()const noexcept{return y;}
@@ -316,7 +315,7 @@ inline SPlus& SetL(float L)noexcept{l=L;return *this;}
 inline SPlus& ShiftX(float dx)noexcept{x+=dx;return *this;}
 inline SPlus& ShiftY(float dy)noexcept{y+=dy;return *this;}
 inline SPlus& LERP(const FGE_FPoint& p, float lerpRate=0.01){x+=lerpRate*(p.x-x);y+=lerpRate*(p.y-y);return *this;}
-inline SPlus& SMOOTHSTEP(const FGE_FPoint& p, float stepRate=0.04){x+=SHAPE_SMOOTHSTEP(stepRate*gcem::tanh(p.x-x))*(p.x-x);y+=SHAPE_SMOOTHSTEP(stepRate*gcem::tanh(p.y-y))*(p.y-y);return *this;}
+inline SPlus& SMOOTHSTEP(const FGE_FPoint& p, float stepRate=0.04){x+=SHAPE_SMOOTHSTEP(stepRate*QM::tanh(p.x-x))*(p.x-x);y+=SHAPE_SMOOTHSTEP(stepRate*QM::tanh(p.y-y))*(p.y-y);return *this;}
 
 inline float GetX()const noexcept{return x;}
 inline float GetY()const noexcept{return y;}

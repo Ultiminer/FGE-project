@@ -2,7 +2,7 @@
 #define FGE_COLOR_H_
 #include "FGE_sdl_types.h"
 #include <array>
-#include "GCEM/gcem.hpp"
+#include "quick_math.h"
 
 /*
 The mantra of this header is that colors should come out of the box with zero mental overhead.

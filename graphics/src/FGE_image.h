@@ -51,29 +51,33 @@ glBindTexture(GL_TEXTURE_2D,id);
 
 };
 
-inline void FGE_DrawImage(FGE::SRect& rect, FGE_Texture& texture)
+constexpr std::array<float,16> __MakeImageVerticies(const FGE_FRect& rect)
 {
-    rect.w2=texture.width/2;
-    rect.h2=texture.height/2;
+    return {rect.x-rect.w,rect.y+rect.h,0,1,rect.x+rect.w,rect.y+rect.h,1,1,rect.x+rect.w,rect.y-rect.h,1,0,rect.x-rect.w,rect.y-rect.h,0,0};
+}
+inline void FGE_DrawImage(const FGE_FRect& rect, FGE_Texture& texture)
+{
 
-    rect.UpdateShape();
-    __fge_primitive_uniform_sys.setf("midPoint",rect.xm,rect.ym).seti("ourTexture",0).seti("drawImage",1);
-    const size_t indicesSize{3*(5-1)};
+    __fge_primitive_uniform_sys.seti("ourTexture",0).seti("drawImage",1);
+    const size_t indicesSize{6};
+    const auto verticies=__MakeImageVerticies(rect);
 
     glBindVertexArray(__fge_primitive_renderer.vertexArray);
     glBindBuffer(GL_ARRAY_BUFFER,__fge_primitive_renderer.vertexBuffer);
-    glBufferData(GL_ARRAY_BUFFER,sizeof(float)*2*5,&rect.vertices,GL_DYNAMIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER,sizeof(float)*4*4,&verticies,GL_DYNAMIC_DRAW);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,__fge_primitive_renderer.elementBuffer);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER,sizeof(unsigned int)*indicesSize,__FGE_PRIMITIVE_PRELOAD_INDICES,GL_DYNAMIC_DRAW);
     
-    __FGE_PRIMITIVE_SetAttributes(2);
+    __FGE_PRIMITIVE_SetAttributes(2,1,4);
+    __FGE_PRIMITIVE_SetAttributes(2,0,4);
+
     glBindVertexArray(__fge_primitive_renderer.vertexArray);
     texture.bind();
 
     glUseProgram(__fge_primitive_renderer.shaderProgram);
     glDrawElements(GL_TRIANGLES,indicesSize,GL_UNSIGNED_INT,0);
-
-
+    __fge_primitive_uniform_sys.seti("drawImage",0);
+    glDisableVertexAttribArray(1);
 }
 
 #endif

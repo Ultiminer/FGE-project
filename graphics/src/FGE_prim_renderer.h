@@ -111,10 +111,9 @@ inline std::string __FGE_PRIMITIVE_GetShaderSrc(const char* src)noexcept
 constexpr void __FGE_PRIMITIVE_SetAttributes(int dimensions=2,int index= 0,int stride=0  )noexcept
 {
 if(!stride)stride=dimensions; 
-
 glVertexAttribPointer(index, dimensions, GL_FLOAT, GL_FALSE, stride * sizeof(float),
-(void*)0);
-glEnableVertexAttribArray(0);
+(void*)(index*dimensions*sizeof(float)));
+glEnableVertexAttribArray(index);
 }
 
 inline void __FGE_PRIM_RENDER_INIT(const char* vertexSrc, const char* fragmentSrc, const std::vector<const char*>& uniformArgs )noexcept
@@ -296,9 +295,9 @@ inline void FGE_RENDER_SMOOTH()
 
 inline void FGE_INIT_RENDER_DEFAULT()
 {
-    __FGE_PRIM_RENDER_INIT("../shader/default_vertex.glsl","../shader/default_fragment.glsl",{"myColor","myAngle","myShape","myCamera","windSize","coordMode","midPoint","drawImage","ourTexture"});
-    __fge_primitive_uniform_sys.setf("myColor",0,0,0,0).setf("myAngle",0).setf("myShape",0,0,1,1).setf("myCamera",0,0)
-    .setf("windSize",800,600).seti("coordMode",0).setf("midPoint",0,0).seti("drawImage",0).seti("ourTexture",0);
+    __FGE_PRIM_RENDER_INIT("../shader/default_vertex.glsl","../shader/default_fragment.glsl",{"myColor","windSize","coordMode","drawImage","ourTexture"});
+    __fge_primitive_uniform_sys.setf("myColor",0,0,0,0)
+    .setf("windSize",800,600).seti("coordMode",0).seti("drawImage",0).seti("ourTexture",0);
 }
 
 inline void FGE_UseRelativeCoords()noexcept

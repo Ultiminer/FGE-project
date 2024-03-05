@@ -10,11 +10,12 @@ int FGE_Main()
     //Creating the window context
     FGE::Window wind= FGE_General_Init();
     
-    FGE_FRect rect={0,0,200,200};
+    FGE::SRect rect={0,0,100,100};
     FGE_Texture text="test.png";
     FGE::SRect cool{100,100,20,20};
     FGE_Loop_Start(wind);
     FGE_DrawImage(rect,text);
+    rect.Rotate(0.001).UpdateShape();
     cool.Draw(FGE::blue).UpdateShape();
     FGE_Loop_End(wind);
 

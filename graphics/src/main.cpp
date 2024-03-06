@@ -13,7 +13,7 @@ int FGE_Main()
     FGE::SRect rect={0,0,100,100};
     FGE_Texture text="test.png";
     FGE::SRect cool{100,100,40,40};
-    FGE::Label label=FGE::Label({0,0,400,50},"Hi Mum, I discovered labels!!",FGE::LabelStd);
+    FGE::Label label=FGE::Label({0,0,400,50},"Hi Mum, ",FGE::LabelStd);
     FGE_Loop_Start(wind);
     cool.Draw(FGE::blue).UpdateShape();
     FGE_DrawImage(rect,text);

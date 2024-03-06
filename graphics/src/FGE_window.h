@@ -53,6 +53,7 @@ int wWidth=0, wHeight=0;
 SDL_GLContext ctx; 
 size_t currTime=FGE_CurrentMilliseconds();
 size_t deltaTime=50;
+bool UpKey=false; 
 public:
 inline Window(const char* title, int width, int height, Uint32 flags=0)
 {
@@ -111,7 +112,14 @@ return *this;
 inline Window& PollEvents()
 {
     SDL_PollEvent(sdlEvent);
+    if(sdlEvent->type==SDL_KEYDOWN&&sdlEvent->key.keysym.sym==SDLK_LSHIFT)UpKey=true;
+    if(sdlEvent->type==SDL_KEYUP&&sdlEvent->key.keysym.sym==SDLK_LSHIFT)UpKey=false;
+
     return *this;
+}
+constexpr bool GetUpKey()const
+{
+    return UpKey;
 }
 inline Window& SetTitle(const char* title)
 {
@@ -138,12 +146,12 @@ inline size_t GetFPS()const noexcept
 {
     return 1000/(1+deltaTime); 
 }
-inline bool KeyDown(uint8_t key)
+inline bool KeyDown(long long int key)
 {
     if(sdlEvent->type!=SDL_KEYDOWN)return false;
     return sdlEvent->key.keysym.sym==key;
 }
-inline bool KeyUp(uint8_t key)
+inline bool KeyUp(long long int key)
 {
     if(sdlEvent->type!=SDL_KEYUP)return false;
     return sdlEvent->key.keysym.sym==key;
@@ -159,6 +167,8 @@ inline int GetHeight()
 inline Window& QueryMousePos(FGE_Point& p)
 {  
     SDL_GetMouseState(&p.x,&p.y);
+    p.x-=wWidth/2;
+    p.y=wHeight/2-p.y;
     return* this;   
 }
 inline Window& SetWidth(int width)
@@ -262,6 +272,13 @@ inline Window& Swap()
     SDL_GL_SwapWindow(sdlWindow);
     return *this;
 }
+inline bool LeftClick()
+{
+return (sdlEvent->type==SDL_MOUSEBUTTONDOWN&&sdlEvent->button.button==SDL_BUTTON_LEFT);
+}
+
+
+
 };
 
 

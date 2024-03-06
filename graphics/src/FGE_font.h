@@ -6,6 +6,9 @@
 #include "FGE_sdl_types.h"
 #include "FGE_styles.h"
 #include <string>
+#include "FGE_window.h"
+#include "quick_math.h"
+
 inline void FGE_DrawFont(const FGE_FRect& rect, char c,bool loadHalf=false)
 {
     static FGE_Texture base_font="../ttf/text.png";
@@ -120,7 +123,26 @@ struct Label
     {
         return txt; 
     }
+    inline Label& GetInput(FGE::Window& wind)
+    {
+        if(wind.KeyDown(SDLK_BACKSPACE)){if(txt.size()>0)txt.erase(txt.begin()+txt.size()-1);return *this;}
 
+        for(size_t i=32; i<32+95;++i)if(wind.KeyDown(i)){txt+=(char)i-(wind.GetUpKey()&&i>='a'&&i<='z')*32;return *this;}
+        return *this;
+    }
+    constexpr bool OnHover(const FGE_Point& mouse)const
+    {
+        return (QM::abs(labelRect.xm-mouse.x)<labelRect.w2&&QM::abs(labelRect.ym-mouse.y)<labelRect.h2);
+    }
+  
+    inline Label& GetInputOnHover(FGE::Window& wind)
+    {
+        SDL_Point pos; 
+        wind.QueryMousePos(pos);
+        if(!OnHover(pos))return *this;
+        GetInput(wind);
+        return *this;
+    }
 };
 
 

@@ -298,6 +298,8 @@ inline void FGE_INIT_RENDER_DEFAULT()
     __FGE_PRIM_RENDER_INIT("../shader/default_vertex.glsl","../shader/default_fragment.glsl",{"myColor","windSize","coordMode","drawImage","ourTexture"});
     __fge_primitive_uniform_sys.setf("myColor",0,0,0,0)
     .setf("windSize",800,600).seti("coordMode",0).seti("drawImage",0).seti("ourTexture",0);
+
+    FGE_RENDER_SMOOTH();
 }
 
 inline void FGE_UseRelativeCoords()noexcept

@@ -15,6 +15,7 @@ unsigned int id=0;
 int width=0;
 int height=0; 
 int channelNum=0; 
+FGE_Texture(){}
 FGE_Texture(const char* path)
 {
 
@@ -27,7 +28,6 @@ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 stbi_set_flip_vertically_on_load(true);  
-
 unsigned char *data= stbi_load(path, &width, &height, &channelNum, 0);
 if (!data) FGE_EXIT("Image path was nonexistent-> exit!");
 
@@ -51,7 +51,7 @@ glBindTexture(GL_TEXTURE_2D,id);
 
 constexpr std::array<float,16> __MakeImageVerticies(const FGE_FRect& rect,float widthPercentage=1,float heightPercentage=1, float xOffset=0,float yOffset=0)
 {
-    return {rect.x-rect.w,rect.y+rect.h,xOffset,yOffset+heightPercentage,rect.x+rect.w,rect.y+rect.h,xOffset+widthPercentage,yOffset+heightPercentage,rect.x+rect.w,rect.y-rect.h,xOffset+widthPercentage,yOffset,rect.x-rect.w,rect.y-rect.h,xOffset,yOffset};
+    return {rect.x,rect.y+rect.h,xOffset,yOffset+heightPercentage,rect.x+rect.w,rect.y+rect.h,xOffset+widthPercentage,yOffset+heightPercentage,rect.x+rect.w,rect.y,xOffset+widthPercentage,yOffset,rect.x,rect.y,xOffset,yOffset};
 }
 constexpr std::array<float,16> __MakeImageVerticies(const FGE::SRect& rect,float widthPercentage=1,float heightPercentage=1, float xOffset=0,float yOffset=0)
 {
@@ -70,7 +70,7 @@ inline void FGE_DrawImage(const FGE_FRect& rect, FGE_Texture& texture,float widt
     glBufferData(GL_ARRAY_BUFFER,sizeof(float)*4*4,&verticies,GL_DYNAMIC_DRAW);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,__fge_primitive_renderer.elementBuffer);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER,sizeof(unsigned int)*indicesSize,__FGE_PRIMITIVE_PRELOAD_INDICES,GL_DYNAMIC_DRAW);
-    
+   
     __FGE_PRIMITIVE_SetAttributes(2,1,4);
     __FGE_PRIMITIVE_SetAttributes(2,0,4);
 
@@ -94,7 +94,7 @@ inline void FGE_DrawImage(const FGE::SRect& rect, FGE_Texture& texture,float wid
     glBufferData(GL_ARRAY_BUFFER,sizeof(float)*4*4,&verticies,GL_DYNAMIC_DRAW);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,__fge_primitive_renderer.elementBuffer);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER,sizeof(unsigned int)*indicesSize,__FGE_PRIMITIVE_PRELOAD_INDICES,GL_DYNAMIC_DRAW);
-    
+    glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
     __FGE_PRIMITIVE_SetAttributes(2,1,4);
     __FGE_PRIMITIVE_SetAttributes(2,0,4);
 
@@ -106,7 +106,11 @@ inline void FGE_DrawImage(const FGE::SRect& rect, FGE_Texture& texture,float wid
     __fge_primitive_uniform_sys.seti("drawImage",0);
     glDisableVertexAttribArray(1);
 }
-
+inline void FGE_DrawImage(float x, float y, float w , float h, FGE_Texture& texture,float widthPercentage=1,float heightPercentage=1, float xOffset=0,float yOffset=0)
+{
+const FGE_FRect dummy{x,y,w,h};
+FGE_DrawImage(dummy,texture,widthPercentage,heightPercentage,xOffset,yOffset);
+}
 struct FGE_Image
 {
     FGE_Texture* text; 

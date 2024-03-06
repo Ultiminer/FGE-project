@@ -9,8 +9,10 @@ const float conv=0.0039215686274509803921568627451;
 
 void main()
 {
-if(drawImage==1)
-FragColor=texture(ourTexture,texCoord);
+if(drawImage==1){
+vec4 imColor=texture(ourTexture,texCoord);
+FragColor=vec4(imColor.x,imColor.y,imColor.z,imColor.w);
+}
 else if(drawImage==0)
 FragColor = vec4(myColor.x*conv,myColor.y*conv,myColor.z*conv,myColor.w*conv);
 

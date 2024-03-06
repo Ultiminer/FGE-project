@@ -318,18 +318,5 @@ inline void FGE_SetClearColor(const FGE_Color& col)noexcept
 {
     glClearColor(col.r/255.0f,col.g/255.0f,col.b/255.0f,col.a/255.0f);
 }
-inline void FGE_SetCamera(const FGE_FPoint& p)noexcept
-{
- __fge_primitive_uniform_sys.setf("myCamera",p.x,p.y);
-}
-inline void FGE_WorldShift(float x, float y, float w, float h)noexcept
-{
-__fge_primitive_uniform_sys.setf("myShape",x,y,w,h);
-}
-inline void FGE_WorldRotate(float angle)noexcept
-{
-__fge_primitive_uniform_sys.setf("myAngle",angle);
-}
-
 
 #endif

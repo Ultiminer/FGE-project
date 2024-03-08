@@ -19,6 +19,7 @@ int FGE_Main()
     FGE_DrawImage(rect,text);
     rect.Rotate(0.01).UpdateShape();
     label.Draw();
+    label.GetInput(wind);
     FGE_Loop_End(wind);
 
     FGE_Return();

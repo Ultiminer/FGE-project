@@ -123,11 +123,24 @@ struct Label
     {
         return txt; 
     }
+    /*ASSUMES QWERTZ keyboard lol*/
     inline Label& GetInput(FGE::Window& wind)
     {
         if(wind.KeyDown(SDLK_BACKSPACE)){if(txt.size()>0)txt.erase(txt.begin()+txt.size()-1);return *this;}
+        if(wind.GetUpKey())
+        {
+            if(wind.KeyDown('.')){txt+=":";return *this;}
+            if(wind.KeyDown(',')){txt+=";";return *this;}
+            if(wind.KeyDown('-')){txt+="_";return *this;}
+            if(wind.KeyDown('+')){txt+="*";return *this;}
+            if(wind.KeyDown('#')){txt+="'";return *this;}
+            if(wind.KeyDown('<')){txt+=">";return *this;}
+            if(wind.KeyDown(SDLK_BACKSLASH)){txt+="?";return *this;}
 
-        for(size_t i=32; i<32+95;++i)if(wind.KeyDown(i)){txt+=(char)i-(wind.GetUpKey()&&i>='a'&&i<='z')*32;return *this;}
+
+        }
+        
+        for(size_t i=32; i<32+95;++i)if(wind.KeyDown(i)){txt+=(char)i-(wind.GetUpKey()&&i>='a'&&i<='z')*32-(wind.GetUpKey()&&i>='0'&&i<='9')*16;return *this;}
         return *this;
     }
     constexpr bool OnHover(const FGE_Point& mouse)const
@@ -141,6 +154,11 @@ struct Label
         wind.QueryMousePos(pos);
         if(!OnHover(pos))return *this;
         GetInput(wind);
+        return *this;
+    }
+    inline Label& Update()
+    {
+        labelRect.UpdateShape();
         return *this;
     }
 };

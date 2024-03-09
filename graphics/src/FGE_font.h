@@ -45,7 +45,7 @@ struct Label
     Label(){}
     Label(const FGE_FRect& LabelRect,const std::string &Txt,float Padding=7,FGE_Color Outside=FGE::lightgray,FGE_Color Inside= FGE::darkgray)
     {
-        labelRect={LabelRect.x+LabelRect.w/2,LabelRect.y+LabelRect.h/2,LabelRect.w/2,LabelRect.h/2}; 
+        labelRect={LabelRect.x+LabelRect.w/2,LabelRect.y-LabelRect.h/2,LabelRect.w/2,LabelRect.h/2}; 
         padding=Padding;
         outside=Outside;
         inside=Inside;
@@ -53,7 +53,7 @@ struct Label
     }
     Label(const FGE_FRect& LabelRect,const std::string &Txt, const LabelStyle& Style)
     {
-        labelRect={LabelRect.x+LabelRect.w/2,LabelRect.y+LabelRect.h/2,LabelRect.w/2,LabelRect.h/2}; 
+        labelRect={LabelRect.x+LabelRect.w/2,LabelRect.y-LabelRect.h/2,LabelRect.w/2,LabelRect.h/2}; 
         padding=Style.padding;
         outside=Style.outside;
         inside=Style.inside;
@@ -173,7 +173,7 @@ struct Box
     Box(){}
     Box(const FGE_FRect& LabelRect,const std::string &Txt,float Height,float Padding=7,FGE_Color Outside=FGE::lightgray,FGE_Color Inside= FGE::darkgray)
     {
-        labelRect={LabelRect.x+LabelRect.w/2,LabelRect.y+LabelRect.h/2,LabelRect.w/2,LabelRect.h/2}; 
+        labelRect={LabelRect.x+LabelRect.w/2,LabelRect.y-LabelRect.h/2,LabelRect.w/2,LabelRect.h/2}; 
         height=Height;
         padding=Padding;
         outside=Outside;
@@ -182,7 +182,7 @@ struct Box
     }
     Box(const FGE_FRect& LabelRect,float Height,const std::string &Txt, const LabelStyle& Style)
     {
-        labelRect={LabelRect.x+LabelRect.w/2,LabelRect.y+LabelRect.h/2,LabelRect.w/2,LabelRect.h/2}; 
+        labelRect={LabelRect.x+LabelRect.w/2,LabelRect.y-LabelRect.h/2,LabelRect.w/2,LabelRect.h/2}; 
         height=Height;
         padding=Style.padding;
         outside=Style.outside;

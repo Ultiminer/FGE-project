@@ -12,6 +12,7 @@ struct LabelStyle{
 __FGE_CLabel LabelStd{7,FGE::darkgray,FGE::lightgray};
 __FGE_CLabel LabelAlert{8,FGE::red,FGE::orange};
 __FGE_CLabel LabelStdPro{7,FGE::gray,FGE::whitesmoke};
+__FGE_CLabel LabelContrast{7,FGE::white,FGE::black};
 
 
 

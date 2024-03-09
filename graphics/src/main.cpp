@@ -13,13 +13,13 @@ int FGE_Main()
     FGE::SRect rect={0,0,100,100};
     FGE_Texture text="test.png";
     FGE::SRect cool{100,100,40,40};
-    FGE::Label label=FGE::Label({0,0,400,50},"Hi Mum, ",FGE::LabelStd);
+    FGE::Box box=FGE::Box({-300,0,600,150},25,"Hi Mum, ",FGE::LabelContrast);
     FGE_Loop_Start(wind);
     cool.Draw(FGE::blue).UpdateShape();
     FGE_DrawImage(rect,text);
     rect.Rotate(0.01).UpdateShape();
-    label.Draw();
-    label.GetInput(wind);
+    box.Draw();
+    box.GetInput(wind);
     FGE_Loop_End(wind);
 
     FGE_Return();

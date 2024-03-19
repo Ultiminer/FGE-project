@@ -325,6 +325,107 @@ inline float GetY()const noexcept{return y;}
 inline float GetL()const noexcept{return l;}
 };
 
+/*TODO:Fix the transition of first and last vertices*/
+inline std::array<float,1026> __FGE_SRoundedRectGeneratePrimitives(const float d)
+{
+   std::array<float,1026>buffer={};
+   constexpr size_t CIRCLE_QUARTER{256};
+   
+   const std::array<float,CIRCLE_QUARTER> quarter1=TransformVertices<CIRCLE_QUARTER>(__FGE_PRIMITIVE_PRELOAD_CIRCLE_DATA,1-d,1-d,d,d);
+   const std::array<float,CIRCLE_QUARTER> quarter2=TransformVertices<CIRCLE_QUARTER>(__FGE_PRIMITIVE_PRELOAD_CIRCLE_DATA+CIRCLE_QUARTER,-(1-d),1-d,d,d);
+   const std::array<float,CIRCLE_QUARTER> quarter3=TransformVertices<CIRCLE_QUARTER>(__FGE_PRIMITIVE_PRELOAD_CIRCLE_DATA+2*CIRCLE_QUARTER,-(1-d),-(1-d),d,d);
+   const std::array<float,CIRCLE_QUARTER> quarter4=TransformVertices<CIRCLE_QUARTER>(__FGE_PRIMITIVE_PRELOAD_CIRCLE_DATA+3*CIRCLE_QUARTER,1-d,-(1-d),d,d);
+   std::copy(quarter1.begin(), quarter1.end(), buffer.begin());
+   std::copy(quarter2.begin(), quarter2.end(), buffer.begin()+CIRCLE_QUARTER);
+   std::copy(quarter3.begin(), quarter3.end(), buffer.begin()+CIRCLE_QUARTER*2);
+   std::copy(quarter4.begin(), quarter4.end(), buffer.begin()+CIRCLE_QUARTER*3);
+   // buffer.at(buffer.size()-4)=quarter1.at(0);
+  // buffer.at(buffer.size()-3)=quarter1.at(1);
+    buffer.at(buffer.size()-2)=quarter1.at(0);
+   buffer.at(buffer.size()-1)=quarter1.at(1);
+
+
+   return buffer;
+}
+
+class SRoundedRect
+{
+public: 
+float xm; float ym; float w2; float h2;float angle;
+private: 
+float d; 
+public:
+std::array<float,1026>vertices;
+std::array<float,1026>primitive;
+
+inline SRoundedRect& UpdateShape()noexcept
+{
+vertices=TransformVertices<1026>(primitive.data(),xm,ym,w2,h2,angle);
+
+return *this;
+}
+SRoundedRect(){
+   primitive= __FGE_SRoundedRectGeneratePrimitives(d);
+}
+SRoundedRect(float X_M, float Y_M, float W_HALF, float H_HALF, float ANGLE=0,float D=0):xm(X_M),ym(Y_M),w2(W_HALF),h2(H_HALF),angle(ANGLE),d(D){
+   primitive= __FGE_SRoundedRectGeneratePrimitives(d);
+UpdateShape();
+}
+inline SRoundedRect& Draw()noexcept 
+{
+    __FGE_PRIM_RENDER_FILL_SHAPE((float*)vertices.data(),vertices.size()/2);
+    return *this;
+}
+inline void Draw()const noexcept 
+{
+    __FGE_PRIM_RENDER_FILL_SHAPE((float*)vertices.data(),vertices.size()/2);
+}
+inline SRoundedRect& SetRect(const FGE_FRect& RECT)
+{
+xm=RECT.x;
+ym=RECT.y;
+w2=RECT.w;
+h2=RECT.h;
+return *this;
+}
+inline SRoundedRect& Draw(const FGE_Color& color)noexcept
+{
+    FGE_SetColor(color);
+    return Draw();
+}
+inline SRoundedRect& DrawBorder()noexcept
+{
+    __FGE_PRIM_RENDER_DRAW_SHAPE((float*)vertices.data(),vertices.size()/2);
+    return *this;
+}
+inline SRoundedRect& DrawBorder(const FGE_Color& color)noexcept
+{
+    FGE_SetColor(color);
+    return DrawBorder();
+}
+inline SRoundedRect& SetXM(float XM)noexcept{xm=XM; return*this;}
+inline SRoundedRect& SetYM(float YM)noexcept{ym=YM; return*this;}
+inline SRoundedRect& SetW2(float W2)noexcept{w2=W2; return*this;}
+inline SRoundedRect& SetH2(float H2)noexcept{h2=H2; return*this;}
+inline SRoundedRect& SetAngle(float ANGLE)noexcept{angle=ANGLE; return*this;}
+inline SRoundedRect& SetD(float D)noexcept{d=D; 
+   primitive= __FGE_SRoundedRectGeneratePrimitives(d);
+return*this;}
+
+inline SRoundedRect& ShiftX(float dx)noexcept{xm+=dx;return *this;}
+inline SRoundedRect& ShiftY(float dy)noexcept{ym+=dy;return *this;}
+inline SRoundedRect& Rotate(float dTheta)noexcept{angle+=dTheta;return *this;}
+inline SRoundedRect& LERP(const FGE_FPoint& p, float lerpRate=0.01){xm+=lerpRate*(p.x-xm);ym+=lerpRate*(p.y-ym);return *this;}
+inline SRoundedRect& SMOOTHSTEP(const FGE_FPoint& p, float stepRate=0.04){xm+=SHAPE_SMOOTHSTEP(stepRate*QM::tanh(p.x-xm))*(p.x-xm);ym+=SHAPE_SMOOTHSTEP(stepRate*QM::tanh(p.y-ym))*(p.y-ym);return *this;}
+
+inline float GetXM()const noexcept{return xm;}
+inline float GetYM()const noexcept{return ym;}
+inline float GetW2()const noexcept{return w2;}
+inline float GetH2()const noexcept{return h2;}
+inline float GetAngle()const noexcept{return angle;}
+inline float GetD()const noexcept{return d;}
+
+};
 
 
 

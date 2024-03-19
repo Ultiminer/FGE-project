@@ -58,6 +58,7 @@ constexpr std::array<float,S> TransformVertices(const float* const vertices, flo
 
     return retValue; 
 } 
+
 }
 
 

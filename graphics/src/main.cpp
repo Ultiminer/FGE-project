@@ -12,19 +12,11 @@ int FGE_Main()
     
     FGE::SRect rect={0,0,100,100};
     FGE_Texture text="test.png";
-    FGE::SRect cool{100,100,40,40};
-    FGE::Box box=FGE::Box({-300,0,600,150},25,"Hi Mum, ",FGE::LabelContrast);
-    FGE::Label label=FGE::Label({-300,0,600,50},"Hi Mum, ",FGE::LabelContrast);
-
+    FGE::SRoundedRect rrect{100,100,160,80,0,0.9};
     FGE_Loop_Start(wind);
-    cool.Draw(FGE::blue).UpdateShape();
     FGE_DrawImage(rect,text);
     rect.Rotate(0.01).UpdateShape();
-    box.Draw();
-    box.GetInput(wind);
-    label.Draw();
-    label.GetInput(wind);
-
+    rrect.Rotate(0.01).UpdateShape().Draw(FGE::red).DrawBorder();
     FGE_Loop_End(wind);
 
     FGE_Return();

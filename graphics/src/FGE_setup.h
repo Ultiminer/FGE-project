@@ -3,6 +3,7 @@
 #include "FGE_window.h"
 #include "FGE_shape.h"
 #include "FGE_Color.h"
+#include "FGE_font.h"
 
 
 #define BUILD_ALL_TARGETS remove("../build/main.o");remove("../build/glad.o");
@@ -34,11 +35,12 @@ inline FGE::Window FGE_General_Init()noexcept
     FGE_SetClearColor(FGE::lightpink|FGE::black);
     FGE_UseAbsoluteCoords(wind.GetWidth(),wind.GetHeight());
     FGE_SetState(FGE_STATE::RUN);
+    FGE_LoadFont("../ttf/text.png");
 
     return wind;
 }
 #define FGE_Loop_Start(__FGE_WINDOW_OBJ__) while(__FGE_WINDOW_OBJ__.IsRunning()&&__fge_state==FGE_STATE::RUN){FGE_START_RENDER();
 #define FGE_Loop_End(__FGE_WINDOW_OBJ__)__FGE_WINDOW_OBJ__.Swap();__FGE_WINDOW_OBJ__.PollEvents();}FGE_PRIM_RENDER_DELETE();FGE_SetState(FGE_STATE::EXIT);
-#define FGE_Return() return (int)FGE_GetState(); 
+#define FGE_Return()    FGE_FontClose();return (int)FGE_GetState(); 
 
 #endif

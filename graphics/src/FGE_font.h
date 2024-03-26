@@ -9,11 +9,23 @@
 #include "FGE_window.h"
 #include "quick_math.h"
 
+inline struct __STRUCT_FGE_BASE_FONT
+{
+    FGE_Texture* ttf=nullptr; 
+}__FGE_BASE_FONT;
+inline void FGE_LoadFont(const char* path)
+{
+    if(__FGE_BASE_FONT.ttf!=nullptr)delete __FGE_BASE_FONT.ttf;
+    __FGE_BASE_FONT.ttf= new FGE_Texture(path);
+}
+
+inline void FGE_FontClose()
+{
+    delete __FGE_BASE_FONT.ttf; 
+}
 inline void FGE_DrawFont(const FGE_FRect& rect, char c,bool loadHalf=false)
 {
-    static FGE_Texture base_font="../ttf/text.png";
-
-    FGE_DrawImage(rect,base_font,1.f/95.f-loadHalf*0.5f/95.f,1,(float)(c-32)/95.f);
+    FGE_DrawImage(rect,*__FGE_BASE_FONT.ttf,1.f/95.f-loadHalf*0.5f/95.f,1,(float)(c-32)/95.f);
 }
 /*Returns the haltd element in the box overflow condition*/
 inline int FGE_DrawFont(const FGE_FRect& rect, std::string text, float l, int id=0)

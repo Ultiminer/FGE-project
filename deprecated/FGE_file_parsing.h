@@ -39,14 +39,26 @@ str.assign((std::istreambuf_iterator<char>(t)),
 
 return std::move(str);
 }
+inline float atof_ignore(const char* str)noexcept
+{
+    std::string buffer; 
+    for(size_t i=0; i<sizeof(str)/sizeof(*str);++i)
+    if(42<(*(str+i))&&(*(str+i))<58)buffer+=*(str+i);
 
+    return atof(buffer.c_str());
+}
 template<typename T>
 inline bool contains(const std::vector<T>& vec, T id)noexcept
 {
     for(auto& el:vec)if(el==id)return 1;
     return 0;
 }
+inline bool contains(const char* str, char c)
+{
+    for(size_t i=0; i<sizeof(str)/sizeof(*str);++i)if(*(str+i)==c)return true;
 
+    return false;
+}
 inline SeperatorList SeperateFile(const char* filename, const std::vector<char>& seperators)
 {
 char ch;
@@ -54,6 +66,20 @@ std::fstream fin(filename, std::fstream::in);
 SeperatorList list; list.reserve(100);
 std::string word=""; 
 while (fin >> std::noskipws >> ch) {
+if(contains(seperators,ch)){if(word!=""){list.push_back(word); word="";}continue;} 
+word+=ch;
+}
+
+return list; 
+}
+
+inline SeperatorList SeperateString(std::string text, const std::vector<char>& seperators)
+{
+
+
+SeperatorList list; list.reserve(100);
+std::string word=""; 
+for(auto& ch:text){
 if(contains(seperators,ch)){if(word!=""){list.push_back(word); word="";}continue;} 
 word+=ch;
 }

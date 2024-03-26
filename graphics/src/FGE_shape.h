@@ -339,11 +339,8 @@ inline std::array<float,1026> __FGE_SRoundedRectGeneratePrimitives(const float d
    std::copy(quarter2.begin(), quarter2.end(), buffer.begin()+CIRCLE_QUARTER);
    std::copy(quarter3.begin(), quarter3.end(), buffer.begin()+CIRCLE_QUARTER*2);
    std::copy(quarter4.begin(), quarter4.end(), buffer.begin()+CIRCLE_QUARTER*3);
-   // buffer.at(buffer.size()-4)=quarter1.at(0);
-  // buffer.at(buffer.size()-3)=quarter1.at(1);
-    buffer.at(buffer.size()-2)=quarter1.at(0);
+   buffer.at(buffer.size()-2)=quarter1.at(0);
    buffer.at(buffer.size()-1)=quarter1.at(1);
-
 
    return buffer;
 }

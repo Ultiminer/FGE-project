@@ -47,6 +47,7 @@ class Window{
 
 
 private:
+SDL_Surface* iconSurface=nullptr;
 SDL_Window* sdlWindow=nullptr; 
 SDL_Event* sdlEvent=nullptr; 
 int wWidth=0, wHeight=0;
@@ -100,6 +101,8 @@ glClearColor(1,0.46,0.8,1);
 }
 inline ~Window()
 {
+    SDL_FreeSurface(iconSurface);
+    delete iconSurface;
     SDL_Quit();
     SDL_DestroyWindow(sdlWindow);
     delete sdlEvent;
@@ -242,9 +245,10 @@ inline Window& UnGrabInput()
     SDL_SetWindowGrab(sdlWindow,(SDL_bool)false);
     return *this;
 }
-inline Window& SetIcon(SDL_Surface* const img)
+inline Window& SetIcon(const char* path)
 {
-    SDL_SetWindowIcon(sdlWindow,img);
+    iconSurface=SDL_LoadBMP(path);
+    SDL_SetWindowIcon(sdlWindow,iconSurface);
     return *this;
 }
 inline Window& GrabMouse()

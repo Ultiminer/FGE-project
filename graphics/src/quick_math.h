@@ -298,7 +298,12 @@ constexpr float triangle_area(float a, float b, float c)
     return 0.5f*a*QM::triangle_height_on_a(a,b,c);
 }
 
-
+inline void swap(float& a, float& b)noexcept
+{
+    a+=b; 
+    b=a-b; 
+    a=a-b; 
+}
 
 
 

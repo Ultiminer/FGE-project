@@ -266,4 +266,5 @@ inline void FGE_SetClearColor(const FGE_Color& col)noexcept
     glClearColor(col.r/255.0f,col.g/255.0f,col.b/255.0f,col.a/255.0f);
 }
 
+
 #endif
